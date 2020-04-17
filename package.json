@@ -1,0 +1,44 @@
+{
+  "name": "next-splash",
+  "version": "1.0.0",
+  "author": "Khanh Le",
+  "license": "MIT",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "clean": "rimraf .next"
+  },
+  "dependencies": {
+    "@material-ui/core": "^4.9.10",
+    "@material-ui/icons": "^4.9.1",
+    "@material-ui/lab": "^4.0.0-alpha.49",
+    "clsx": "^1.1.0",
+    "css-mediaquery": "^0.1.2",
+    "isomorphic-unfetch": "^3.0.0",
+    "next": "^9.3.5",
+    "next-pwa": "^2.3.3",
+    "prop-types": "^15.7.2",
+    "query-string": "^6.12.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-query": "^1.2.7",
+    "ua-parser-js": "^0.7.21"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "2.x",
+    "@typescript-eslint/parser": "2.x",
+    "babel-eslint": "10.x",
+    "babel-plugin-module-resolver": "^4.0.0",
+    "dotenv": "^8.2.0",
+    "eslint": "6.x",
+    "eslint-config-react-app": "^5.2.1",
+    "eslint-plugin-flowtype": "4.x",
+    "eslint-plugin-import": "2.x",
+    "eslint-plugin-jsx-a11y": "6.x",
+    "eslint-plugin-react": "7.x",
+    "eslint-plugin-react-hooks": "2.x",
+    "prettier": "^2.0.4",
+    "rimraf": "^3.0.2"
+  }
+}
