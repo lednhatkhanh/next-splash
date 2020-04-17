@@ -17,7 +17,6 @@ const HomePage = ({ photos: initialPhotos, deviceInfo, origin }) => {
         };
       },
       initialData: [initialPhotos],
-      refetchOnWindowFocus: false,
     },
   });
   const latestInitialPhoto = initialPhotos[initialPhotos.length - 1];

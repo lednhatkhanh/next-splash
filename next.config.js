@@ -16,7 +16,6 @@ const defaultConfig = {
 const PWAConfig = {
   pwa: {
     dest: "public",
-    // disable: process.env.NODE_ENV !== "production",
     runtimeCaching: [
       {
         urlPattern: /^https?.*\/api\/.*/,

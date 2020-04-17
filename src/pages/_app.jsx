@@ -2,7 +2,12 @@ import React from "react";
 import Head from "next/head";
 import { ThemeProvider } from "@material-ui/core/styles";
 import CssBaseline from "@material-ui/core/CssBaseline";
+import { ReactQueryConfigProvider } from "react-query";
 import { theme } from "~/lib/theme";
+
+const reactQueryConfig = {
+  refetchOnWindowFocus: false,
+};
 
 export default function ReactSplashApp(props) {
   const { Component, pageProps } = props;
@@ -25,9 +30,11 @@ export default function ReactSplashApp(props) {
         />
       </Head>
       <ThemeProvider theme={theme}>
-        {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-        <CssBaseline />
-        <Component {...pageProps} />
+        <ReactQueryConfigProvider config={reactQueryConfig}>
+          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+          <CssBaseline />
+          <Component {...pageProps} />
+        </ReactQueryConfigProvider>
       </ThemeProvider>
     </>
   );
