@@ -54,7 +54,6 @@ const SearchPage = ({ searchResult: initialSearchResult, deviceInfo }) => {
         };
       },
       initialData: [initialSearchResult],
-      refetchOnWindowFocus: false,
     },
   });
   const photos = React.useMemo(

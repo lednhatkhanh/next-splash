@@ -27,7 +27,7 @@ export const PhotoStatisticsModal = ({ photoDetails, onClose }) => {
     data: photoStatistics,
     isFetching: isFetchingPhotoStatistics,
   } = useQuery(["photoStatistics", photoDetails.id], fetchPhotoStatistics, {
-    staleTime: Infinity,
+    staleTime: 1000 * 60 * 5, // 5 minutes
   });
   const publishedAt = React.useMemo(
     () => formatDateTime(new Date(photoDetails.updated_at)),
