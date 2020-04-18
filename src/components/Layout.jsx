@@ -9,6 +9,8 @@ import {
   makeStyles,
   List,
   SwipeableDrawer,
+  useScrollTrigger,
+  Slide,
 } from "@material-ui/core";
 import { Menu as MenuIcon, Search as SearchIcon } from "@material-ui/icons";
 import { AppLink } from "./AppLink";
@@ -23,6 +25,7 @@ export const Layout = ({ children, className }) => {
     []
   );
   const router = useRouter();
+  const trigger = useScrollTrigger();
 
   const handleDrawerClose = React.useCallback(() => {
     setIsDrawerOpening(false);
@@ -54,47 +57,49 @@ export const Layout = ({ children, className }) => {
 
   return (
     <>
-      <AppBar position="relative">
-        <Toolbar>
-          {!isSearching && (
-            <>
-              <IconButton
-                edge="start"
-                color="inherit"
-                aria-label="menu"
-                onClick={handleMenuButtonClick}
-              >
-                <MenuIcon />
-              </IconButton>
-
-              <div className={classes.spacer} />
-
-              <AppLink className={classes.logoLink} href="/">
-                <img className={classes.logo} src="/camera.svg" alt="Logo" />
-              </AppLink>
-
-              {router.pathname !== "/search/[query]" && (
+      <Slide appear={false} direction="down" in={!trigger}>
+        <AppBar position="sticky">
+          <Toolbar>
+            {!isSearching && (
+              <>
                 <IconButton
-                  edge="end"
+                  edge="start"
                   color="inherit"
-                  aria-label="search"
-                  onClick={handleSearchButtonClick}
+                  aria-label="menu"
+                  onClick={handleMenuButtonClick}
                 >
-                  <SearchIcon />
+                  <MenuIcon />
                 </IconButton>
-              )}
-            </>
-          )}
 
-          {isSearching && (
-            <SearchBar
-              className={classes.searchBar}
-              onClose={handleStopSearching}
-              onSearch={handleSearch}
-            />
-          )}
-        </Toolbar>
-      </AppBar>
+                <div className={classes.spacer} />
+
+                <AppLink className={classes.logoLink} href="/">
+                  <img className={classes.logo} src="/camera.svg" alt="Logo" />
+                </AppLink>
+
+                {router.pathname !== "/search/[query]" && (
+                  <IconButton
+                    edge="end"
+                    color="inherit"
+                    aria-label="search"
+                    onClick={handleSearchButtonClick}
+                  >
+                    <SearchIcon />
+                  </IconButton>
+                )}
+              </>
+            )}
+
+            {isSearching && (
+              <SearchBar
+                className={classes.searchBar}
+                onClose={handleStopSearching}
+                onSearch={handleSearch}
+              />
+            )}
+          </Toolbar>
+        </AppBar>
+      </Slide>
 
       <SwipeableDrawer
         open={isDrawerOpening}

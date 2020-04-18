@@ -82,6 +82,7 @@ const useStyles = makeStyles((theme) => ({
     position: "relative",
     width: "100%",
     height: "auto",
+    maxWidth: "100%",
     overflow: "hidden",
     display: "block",
     "&:hover": {
