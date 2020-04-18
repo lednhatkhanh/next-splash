@@ -73,14 +73,16 @@ export const Layout = ({ children, className }) => {
                 <img className={classes.logo} src="/camera.svg" alt="Logo" />
               </AppLink>
 
-              <IconButton
-                edge="end"
-                color="inherit"
-                aria-label="search"
-                onClick={handleSearchButtonClick}
-              >
-                <SearchIcon />
-              </IconButton>
+              {router.pathname !== "/search/[query]" && (
+                <IconButton
+                  edge="end"
+                  color="inherit"
+                  aria-label="search"
+                  onClick={handleSearchButtonClick}
+                >
+                  <SearchIcon />
+                </IconButton>
+              )}
             </>
           )}
 
