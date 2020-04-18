@@ -6,6 +6,7 @@ import {
   Avatar,
   Typography,
   Button,
+  Hidden,
 } from "@material-ui/core";
 import {
   Favorite as FavoriteIcon,
@@ -47,9 +48,12 @@ export const PhotoItem = ({ photo }) => {
               src={photo.user.profile_image.medium}
               alt={username}
             />
-            <Typography component="span" variant="body1">
-              {photo.user.name}
-            </Typography>
+
+            <Hidden mdDown>
+              <Typography component="span" variant="body1">
+                {photo.user.name}
+              </Typography>
+            </Hidden>
           </div>
 
           <div className={classes.actions}>
@@ -112,6 +116,17 @@ const useStyles = makeStyles((theme) => ({
     visibility: "hidden",
     opacity: 0,
     transition: "all 0.3s ease-in-out",
+    [theme.breakpoints.down("md")]: {
+      visibility: "visible",
+      height: "auto",
+      opacity: 1,
+      top: "auto",
+      bottom: 0,
+      gridTemplateRows: "1fr",
+      gridTemplateColumns: "auto 1fr",
+      gridColumnGap: theme.spacing(1),
+      padding: theme.spacing(1),
+    },
   },
   userInfo: {
     display: "flex",
@@ -123,6 +138,13 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     padding: theme.spacing(1, 2),
     justifyContent: "space-between",
+    [theme.breakpoints.down("md")]: {
+      display: "grid",
+      gridTemplateColumns: "repeat(3, auto)",
+      justifyItems: "end",
+      justifyContent: "end",
+      gridColumnGap: theme.spacing(1),
+    },
   },
   avatar: {
     marginBottom: 5,
