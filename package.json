@@ -7,7 +7,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "clean": "rimraf .next"
+    "clean": "rimraf .next",
+    "lint": "eslint src"
   },
   "dependencies": {
     "@material-ui/core": "^4.9.10",
@@ -40,5 +41,13 @@
     "eslint-plugin-react-hooks": "2.x",
     "prettier": "^2.0.4",
     "rimraf": "^3.0.2"
+  },
+  "bundlewatch": {
+    "files": [
+      {
+        "path": ".next/static/**/*.js",
+        "maxSize": "50 KB"
+      }
+    ]
   }
 }
