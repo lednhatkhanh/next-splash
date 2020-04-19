@@ -12,7 +12,7 @@ export const fetchUnsplash = (path, options = {}) => {
   }
 
   const { req, ...otherOptions } = options;
-  const authHeader = req.headers.authorization;
+  const authHeader = req?.headers.authorization;
 
   return fetch(`https://api.unsplash.com/${path}`, {
     ...otherOptions,
