@@ -11,12 +11,17 @@ export const fetchUnsplash = (path, options = {}) => {
     throw new Error("Missing unsplash access and secret keys");
   }
 
+  const { req, ...otherOptions } = options;
+  const authHeader = req.headers.authorization;
+
   return fetch(`https://api.unsplash.com/${path}`, {
-    ...options,
+    ...otherOptions,
     headers: {
-      Authorization: `Client-ID ${process.env.UNSPLASH_ACCESS_KEY}`,
+      Authorization:
+        authHeader ?? `Client-ID ${process.env.UNSPLASH_ACCESS_KEY}`,
       "Content-Type": "application/json",
-      ...(options.headers ?? {}),
+      "Accept-Version": "v1",
+      ...(otherOptions.headers ?? {}),
     },
   }).then((res) => res.json());
 };

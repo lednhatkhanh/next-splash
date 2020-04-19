@@ -1,7 +1,13 @@
 export const useExtractPhotoMetadata = (photo) => {
-  const username = `@${photo.user.username}`;
+  if (!photo) {
+    return { username: undefined, description: undefined };
+  }
+
+  const username = photo.user ? `@${photo.user.username}` : undefined;
   const description =
-    photo.alt_description ?? photo.description ?? `A photo of ${username}`;
+    photo.alt_description ??
+    photo.description ??
+    (username ? `A photo of ${username}` : undefined);
 
   return { username, description };
 };

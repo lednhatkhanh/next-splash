@@ -4,7 +4,10 @@ import { fetchUnsplash } from "~/utils";
 
 const getPhotosAPI = async (req, res) => {
   const photos = await fetchUnsplash(
-    `photos?${queryString.stringify(req.query)}`
+    `photos?${queryString.stringify(req.query)}`,
+    {
+      req,
+    }
   );
 
   res.send(photos);

@@ -1,4 +1,5 @@
 import React from "react";
+import NextLink from "next/link";
 import { useRouter } from "next/router";
 import PropTypes from "prop-types";
 import {
@@ -8,24 +9,32 @@ import {
   Container,
   makeStyles,
   List,
-  SwipeableDrawer,
   useScrollTrigger,
   Slide,
+  Drawer,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
 } from "@material-ui/core";
-import { Menu as MenuIcon, Search as SearchIcon } from "@material-ui/icons";
+import {
+  Menu as MenuIcon,
+  Search as SearchIcon,
+  PersonAdd as PersonAddIcon,
+  ExitToApp as ExitToAppIcon,
+} from "@material-ui/icons";
+
 import { AppLink } from "./AppLink";
 import { SearchBar } from "./SearchBar";
+import { AuthContext } from "~/containers";
+import { deleteToken } from "~/utils";
 
 export const Layout = ({ children, className }) => {
   const classes = useStyles();
   const [isDrawerOpening, setIsDrawerOpening] = React.useState(false);
   const [isSearching, setIsSearching] = React.useState(false);
-  const iOS = React.useMemo(
-    () => process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent),
-    []
-  );
   const router = useRouter();
   const trigger = useScrollTrigger();
+  const { loggedIn, setLoggedIn } = React.useContext(AuthContext);
 
   const handleDrawerClose = React.useCallback(() => {
     setIsDrawerOpening(false);
@@ -53,6 +62,12 @@ export const Layout = ({ children, className }) => {
 
   const handleSearch = (value) => {
     router.push(`/search/${value}`);
+  };
+
+  const handleSignOut = () => {
+    deleteToken();
+    setLoggedIn(false);
+    handleDrawerClose();
   };
 
   return (
@@ -101,15 +116,31 @@ export const Layout = ({ children, className }) => {
         </AppBar>
       </Slide>
 
-      <SwipeableDrawer
-        open={isDrawerOpening}
-        onOpen={handleDrawerOpen}
-        onClose={handleDrawerClose}
-        disableBackdropTransition={!iOS}
-        disableDiscovery={iOS}
-      >
-        <List className={classes.drawerList}></List>
-      </SwipeableDrawer>
+      <Drawer open={isDrawerOpening} onClose={handleDrawerClose}>
+        <List className={classes.drawerList}>
+          {!loggedIn && (
+            <NextLink href="/oauth" passHref>
+              <ListItem component="a" button>
+                <ListItemIcon>
+                  <PersonAddIcon />
+                </ListItemIcon>
+
+                <ListItemText>Sign in</ListItemText>
+              </ListItem>
+            </NextLink>
+          )}
+
+          {loggedIn && (
+            <ListItem button onClick={handleSignOut}>
+              <ListItemIcon>
+                <ExitToAppIcon />
+              </ListItemIcon>
+
+              <ListItemText>Sign out</ListItemText>
+            </ListItem>
+          )}
+        </List>
+      </Drawer>
 
       <Container className={className} component="main" maxWidth="lg">
         {children}
