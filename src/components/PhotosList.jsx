@@ -8,10 +8,20 @@ export const PhotosList = ({
   onFetchMore,
   isFetchingMore,
   isFetching,
+  onToggleLike,
 }) => {
-  const handleRenderPhoto = React.useCallback((photo, photoIndex) => {
-    return <PhotoItem key={`${photo.id}-${photoIndex}`} photo={photo} />;
-  }, []);
+  const handleRenderPhoto = React.useCallback(
+    (photo, photoIndex) => {
+      return (
+        <PhotoItem
+          key={`${photo.id}-${photoIndex}`}
+          photo={photo}
+          onToggleLike={onToggleLike}
+        />
+      );
+    },
+    [onToggleLike]
+  );
 
   return (
     <MasonryList
@@ -29,4 +39,5 @@ PhotosList.propTypes = {
   onFetchMore: PropTypes.func,
   isFetchingMore: PropTypes.bool,
   isFetching: PropTypes.bool,
+  onToggleLike: PropTypes.func.isRequired,
 };

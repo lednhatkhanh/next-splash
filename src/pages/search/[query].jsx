@@ -9,11 +9,11 @@ import {
   makeStyles,
 } from "@material-ui/core";
 import { Search as SearchIcon } from "@material-ui/icons";
-import { useInfiniteQuery } from "react-query";
+import { useInfiniteQuery, useMutation, queryCache } from "react-query";
 
 import { Layout, PhotosList } from "~/components";
-import { fetchSearchPhotos } from "~/fetchers";
-import { getDeviceInfo } from "~/utils";
+import { fetchSearchPhotos, toggleLikePhotoMutation } from "~/fetchers";
+import { getDeviceInfo, getToken, getAbsoluteUrl } from "~/utils";
 import { DeviceInfoProvider } from "~/containers";
 
 const InputProps = {
@@ -26,7 +26,12 @@ const InputProps = {
 
 const PER_PAGE = 15;
 
-const SearchPage = ({ searchResult: initialSearchResult, deviceInfo }) => {
+const SearchPage = ({
+  loggedIn,
+  searchResult: initialSearchResult,
+  deviceInfo,
+  origin,
+}) => {
   const classes = useStyles();
   const router = useRouter();
   const [query, setQuery] = React.useState(router.query.query);
@@ -56,6 +61,55 @@ const SearchPage = ({ searchResult: initialSearchResult, deviceInfo }) => {
       initialData: [initialSearchResult],
     },
   });
+  const [toggleLikePhoto] = useMutation(toggleLikePhotoMutation, {
+    onMutate: ({ id: mutatingPhotoId, type }) => {
+      const oldQueryData = queryCache.getQueryData([
+        "searchPhotos",
+        { query: router.query.query },
+      ]);
+
+      // [{total_pages: 5, results: []}]
+      queryCache.setQueryData(
+        ["searchPhotos", { query: router.query.query }],
+        oldQueryData.map((page) => ({
+          ...page,
+          results: page.results.map((currentPhoto) =>
+            currentPhoto.id === mutatingPhotoId
+              ? {
+                  ...currentPhoto,
+                  likes:
+                    type === "unlike"
+                      ? currentPhoto.likes - 1
+                      : currentPhoto.likes + 1,
+                  liked_by_user: type === "unlike" ? false : true,
+                }
+              : currentPhoto
+          ),
+        }))
+      );
+
+      return () =>
+        queryCache.setQueryData(
+          ["searchPhotos", { query: router.query.query }],
+          oldQueryData
+        );
+    },
+    onError: (_err, _data, rollback) => rollback(),
+    onSettled: () => {
+      queryCache.refetchQueries([
+        "searchPhotos",
+        { query: router.query.query },
+      ]);
+    },
+  });
+
+  const latestInitialPhoto =
+    initialSearchResult.results[initialSearchResult.results.length - 1];
+  const latestInitialPhotoDescription = latestInitialPhoto
+    ? latestInitialPhoto.alt_description ??
+      latestInitialPhoto.description ??
+      `A photo of @${latestInitialPhoto.user.usernmame}`
+    : undefined;
   const photos = React.useMemo(
     () => data.map(({ results }) => results).flat(1),
     [data]
@@ -77,10 +131,73 @@ const SearchPage = ({ searchResult: initialSearchResult, deviceInfo }) => {
     router.push("/search/[query]", `/search/${query}`, { shallow: false });
   };
 
+  const handleToggleLike = async (photo) => {
+    if (!loggedIn) {
+      return;
+    }
+
+    await toggleLikePhoto({
+      id: photo.id,
+      type: photo.liked_by_user ? "unlike" : "like",
+    });
+  };
+
   return (
     <>
       <Head>
-        <title>Search - Next Splash</title>
+        <title>{router.query.query} - Next Splash</title>
+
+        {/* Twitter tags */}
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content="Next Splash" />
+        <meta
+          name="twitter:description"
+          content={`Photos about ${router.query.query}`}
+        />
+        {latestInitialPhoto && (
+          <>
+            {" "}
+            <meta
+              name="twitter:image"
+              content={latestInitialPhoto.urls.regular}
+            />
+            <meta
+              name="twitter:image:alt"
+              content={latestInitialPhotoDescription}
+            />
+          </>
+        )}
+
+        {/* OpenGraph tags */}
+        <meta property="og:title" content="Next Splash" />
+        <meta
+          property="og:description"
+          content={`Photos about ${router.query.query}`}
+        />
+        <meta property="og:url" content={origin} />
+        <meta property="og:type" content="website" />
+
+        {latestInitialPhoto && (
+          <>
+            <meta property="og:image:type" content="image/jpeg" />
+            <meta
+              property="og:image:width"
+              content={`${latestInitialPhoto.width}`}
+            />
+            <meta
+              property="og:image:height"
+              content={`${latestInitialPhoto.height}`}
+            />
+            <meta
+              property="og:image"
+              content={latestInitialPhoto.urls.regular}
+            />
+            <meta
+              property="og:image:alt"
+              content={latestInitialPhotoDescription}
+            />
+          </>
+        )}
       </Head>
 
       <DeviceInfoProvider value={deviceInfo}>
@@ -112,6 +229,7 @@ const SearchPage = ({ searchResult: initialSearchResult, deviceInfo }) => {
             isFetchingMore={isFetchingMore}
             onFetchMore={handleFetchMore}
             isFetching={isFetching && !isFetchingMore}
+            onToggleLike={handleToggleLike}
           />
         </Layout>
       </DeviceInfoProvider>
@@ -122,10 +240,13 @@ const SearchPage = ({ searchResult: initialSearchResult, deviceInfo }) => {
 SearchPage.propTypes = {
   searchResult: PropTypes.object.isRequired,
   deviceInfo: PropTypes.object.isRequired,
+  loggedIn: PropTypes.bool.isRequired,
+  origin: PropTypes.string.isRequired,
 };
 
 export const getServerSideProps = async ({ query, req }) => {
   const deviceInfo = getDeviceInfo(req);
+  const token = getToken(req);
   const searchResult = await fetchSearchPhotos(
     "searchPhotos",
     { query: query.query },
@@ -135,11 +256,14 @@ export const getServerSideProps = async ({ query, req }) => {
     },
     req
   );
+  const { origin } = getAbsoluteUrl(req);
 
   return {
     props: {
       searchResult,
       deviceInfo,
+      loggedIn: !!token,
+      origin,
     },
   };
 };

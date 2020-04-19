@@ -106,6 +106,7 @@ const useStyles = makeStyles((theme) => ({
     gridColumnGap: theme.spacing(4),
     padding: theme.spacing(4, 0, 0, 0),
     width: "100%",
+    gridAutoColumns: "1fr",
   },
   column: {
     display: "grid",

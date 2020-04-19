@@ -4,3 +4,4 @@ export * from "./fetchUnsplash";
 export * from "./getDeiceInfo";
 export * from "./formatDateTime";
 export * from "./redirect";
+export * from "./token";

@@ -10,27 +10,34 @@ import {
 } from "@material-ui/core";
 import {
   Favorite as FavoriteIcon,
+  FavoriteOutlined as FavoriteOutlinedIcon,
   GetApp as GetAppIcon,
   Share as ShareIcon,
 } from "@material-ui/icons";
 
 import { AppLink } from "./AppLink";
 import { useExtractPhotoMetadata, useTriggerDownloadPhoto } from "~/hooks";
+import { AuthContext } from "~/containers";
 
-export const PhotoItem = ({ photo }) => {
+export const PhotoItem = ({ photo, onToggleLike }) => {
   const classes = useStyles();
   const [downloadPhoto] = useTriggerDownloadPhoto(photo);
   const { username, description } = useExtractPhotoMetadata(photo);
+  const { loggedIn } = React.useContext(AuthContext);
 
-  const handleDownloadPhoto = React.useCallback(
-    (event) => {
-      event.stopPropagation();
-      event.preventDefault();
+  const handleDownloadPhoto = (event) => {
+    event.stopPropagation();
+    event.preventDefault();
 
-      downloadPhoto();
-    },
-    [downloadPhoto]
-  );
+    downloadPhoto();
+  };
+
+  const handleLikeButtonClick = (event) => {
+    event.stopPropagation();
+    event.preventDefault();
+
+    onToggleLike(photo);
+  };
 
   return (
     <AppLink href="/photos/[id]" as={`/photos/${photo.id}`}>
@@ -57,7 +64,20 @@ export const PhotoItem = ({ photo }) => {
           </div>
 
           <div className={classes.actions}>
-            <Button startIcon={<FavoriteIcon />}>{photo.likes}</Button>
+            <Button
+              disabled={!loggedIn}
+              startIcon={
+                photo.liked_by_user ? (
+                  <FavoriteOutlinedIcon />
+                ) : (
+                  <FavoriteIcon />
+                )
+              }
+              onClick={handleLikeButtonClick}
+              color={photo.liked_by_user ? "secondary" : undefined}
+            >
+              {photo.likes}
+            </Button>
 
             <Button onClick={handleDownloadPhoto}>
               <GetAppIcon />
@@ -75,6 +95,7 @@ export const PhotoItem = ({ photo }) => {
 
 PhotoItem.propTypes = {
   photo: PropTypes.object.isRequired,
+  onToggleLike: PropTypes.func.isRequired,
 };
 
 const useStyles = makeStyles((theme) => ({
