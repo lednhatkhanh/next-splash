@@ -4,3 +4,4 @@ export * from "./fetchPhotoStatistics";
 export * from "./fetchTrackPhotoDownload";
 export * from "./fetchSearchPhotos";
 export * from "./toggleLikePhotoMutation";
+export * from "./config";

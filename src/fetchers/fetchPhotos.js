@@ -1,6 +1,5 @@
 import { fetchAPI } from "~/utils";
-
-const PER_PAGE = 15;
+import { PER_PAGE } from "./config";
 
 export const fetchPhotos = (
   _key,
