@@ -1,10 +1,10 @@
-import React from "react";
+import React from 'react';
 
-import { fetchPhotos } from "~/fetchers";
-import { getDeviceInfo, getAbsoluteUrl, getToken } from "~/utils";
-import { DeviceInfoProvider } from "~/containers";
-import { AuthProvider } from "~/containers";
-import { PhotosPageHead, PhotosPageContent } from "~/modules/photos";
+import { fetchPhotos } from '~/fetchers';
+import { getDeviceInfo, getAbsoluteUrl, getToken } from '~/utils';
+import { DeviceInfoProvider } from '~/containers';
+import { AuthProvider } from '~/containers';
+import { PhotosPageHead, PhotosPageContent } from '~/modules/photos';
 
 const HomePage = ({ photos, deviceInfo, origin, loggedIn }) => {
   const authProviderValue = React.useMemo(() => ({ loggedIn }), [loggedIn]);
@@ -26,18 +26,18 @@ const HomePage = ({ photos, deviceInfo, origin, loggedIn }) => {
 export const getServerSideProps = async ({ req }) => {
   const token = getToken(req);
   const photos = await fetchPhotos(
-    "photos",
+    'photos',
     { page: 1 },
     {
       req,
-    }
+    },
   );
   const deviceInfo = getDeviceInfo(req);
   const { origin } = getAbsoluteUrl(req);
 
   return {
     props: {
-      photos,
+      photos: photos.errors ? [] : photos,
       deviceInfo,
       origin,
       loggedIn: !!token,
