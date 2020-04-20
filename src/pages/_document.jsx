@@ -21,7 +21,7 @@ export default class NextSplashDocument extends Document {
           />
           <link rel="apple-touch-icon" href="/camera-192.png"></link>
           <link rel="manifest" href="/manifest.json" />
-          <meta httpEquiv="Accept-CH" content="Viewport-Width, Downlink" />
+          <meta httpEquiv="Accept-CH" content="DPR, Viewport-Width" />
           <meta httpEquiv="Accept-CH-Lifetime" content="86400" />
         </Head>
         <body>

@@ -12,16 +12,12 @@ const parseDeviceType = (req) => {
 };
 
 export const getDeviceInfo = (req) => {
-  const deviceInfo = { viewportWidth: null, deviceType: null };
   const viewportWidth = req.headers["viewport-width"] ?? null;
+  const dpr = req.headers["dpr"] ?? null;
 
-  if (viewportWidth && typeof viewportWidth === "string") {
-    deviceInfo.viewportWidth = viewportWidth;
-  } else {
-    const deviceType = parseDeviceType(req);
-
-    deviceInfo.deviceType = deviceType;
-  }
-
-  return deviceInfo;
+  return {
+    viewportWidth,
+    dpr,
+    deviceType: !viewportWidth ? parseDeviceType(req) : null,
+  };
 };

@@ -7,6 +7,7 @@ import {
   Typography,
   Button,
   Hidden,
+  useTheme,
 } from "@material-ui/core";
 import {
   Favorite as FavoriteIcon,
@@ -15,15 +16,23 @@ import {
   Share as ShareIcon,
 } from "@material-ui/icons";
 
-import { AppLink } from "./AppLink";
-import { useExtractPhotoMetadata, useTriggerDownloadPhoto } from "~/hooks";
+import {
+  useExtractPhotoMetadata,
+  useTriggerDownloadPhoto,
+  useCreatePhotoSrcSet,
+} from "~/hooks";
 import { AuthContext } from "~/containers";
+import { AppLink } from "./AppLink";
+
+const photoWidths = Array.from({ length: 10 }, (_v, i) => (i + 3) * 100);
 
 export const PhotoItem = ({ photo, onToggleLike }) => {
   const classes = useStyles();
   const [downloadPhoto] = useTriggerDownloadPhoto(photo);
   const { username, description } = useExtractPhotoMetadata(photo);
   const { loggedIn } = React.useContext(AuthContext);
+  const srcSet = useCreatePhotoSrcSet(photo, photoWidths);
+  const sizes = useGetPhotoSizes();
 
   const handleDownloadPhoto = (event) => {
     event.stopPropagation();
@@ -44,8 +53,9 @@ export const PhotoItem = ({ photo, onToggleLike }) => {
       <Paper className={classes.paper} elevation={6}>
         <img
           className={classes.img}
-          src={photo.urls.regular}
           alt={description}
+          sizes={sizes}
+          srcSet={srcSet}
         />
 
         <div className={classes.overlay}>
@@ -96,6 +106,22 @@ export const PhotoItem = ({ photo, onToggleLike }) => {
 PhotoItem.propTypes = {
   photo: PropTypes.object.isRequired,
   onToggleLike: PropTypes.func.isRequired,
+};
+
+const useGetPhotoSizes = () => {
+  const theme = useTheme();
+  const sizes = React.useMemo(
+    () =>
+      [
+        `(min-width: ${theme.breakpoints.values["lg"]}px) 389px`,
+        `(min-width: ${theme.breakpoints.values["md"]}px) calc((100vw - 144px) / 3)`,
+        `(min-width: ${theme.breakpoints.values["sm"]}px) calc((100vw - 80px) / 2)`,
+        `calc(100vw - 48px)`,
+      ].join(", "),
+    [theme]
+  );
+
+  return sizes;
 };
 
 const useStyles = makeStyles((theme) => ({
@@ -170,5 +196,8 @@ const useStyles = makeStyles((theme) => ({
   },
   avatar: {
     marginBottom: 5,
+    [theme.breakpoints.down("md")]: {
+      marginBottom: 0,
+    },
   },
 }));
