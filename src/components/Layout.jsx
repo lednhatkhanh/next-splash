@@ -17,7 +17,6 @@ import {
   ListItemText,
   ListItemAvatar,
   Avatar,
-  Typography,
 } from "@material-ui/core";
 import {
   Menu as MenuIcon,
