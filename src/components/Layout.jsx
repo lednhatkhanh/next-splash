@@ -15,6 +15,9 @@ import {
   ListItem,
   ListItemIcon,
   ListItemText,
+  ListItemAvatar,
+  Avatar,
+  Typography,
 } from "@material-ui/core";
 import {
   Menu as MenuIcon,
@@ -26,7 +29,16 @@ import {
 import { AppLink } from "./AppLink";
 import { SearchBar } from "./SearchBar";
 import { AuthContext } from "~/containers";
-import { deleteToken } from "~/utils";
+import { deleteToken, fetchAPI } from "~/utils";
+import { useQuery } from "react-query";
+
+const fetchMeQuery = (key, { req = undefined } = { req: undefined }) => {
+  const promise = fetchAPI("me", {
+    req,
+  });
+
+  return promise;
+};
 
 export const Layout = ({ children, className }) => {
   const classes = useStyles();
@@ -35,6 +47,13 @@ export const Layout = ({ children, className }) => {
   const router = useRouter();
   const trigger = useScrollTrigger();
   const { loggedIn, setLoggedIn } = React.useContext(AuthContext);
+  const { data: userProfile } = useQuery({
+    queryKey: loggedIn && "me",
+    queryFn: fetchMeQuery,
+  });
+  const userNameProps = React.useMemo(() => ({ className: classes.userName }), [
+    classes.userName,
+  ]);
 
   const handleDrawerClose = React.useCallback(() => {
     setIsDrawerOpening(false);
@@ -131,13 +150,33 @@ export const Layout = ({ children, className }) => {
           )}
 
           {loggedIn && (
-            <ListItem button onClick={handleSignOut}>
-              <ListItemIcon>
-                <ExitToAppIcon />
-              </ListItemIcon>
+            <>
+              {userProfile && (
+                <ListItem>
+                  <ListItemAvatar>
+                    <Avatar
+                      alt={userProfile.name}
+                      src={userProfile.profile_image.medium}
+                    />
+                  </ListItemAvatar>
 
-              <ListItemText>Sign out</ListItemText>
-            </ListItem>
+                  <ListItemText
+                    primaryTypographyProps={userNameProps}
+                    secondaryTypographyProps={userNameProps}
+                    primary={userProfile.name}
+                    secondary={`@${userProfile.username}`}
+                  />
+                </ListItem>
+              )}
+
+              <ListItem button onClick={handleSignOut}>
+                <ListItemIcon>
+                  <ExitToAppIcon />
+                </ListItemIcon>
+
+                <ListItemText>Sign out</ListItemText>
+              </ListItem>
+            </>
           )}
         </List>
       </Drawer>
@@ -162,7 +201,12 @@ const useStyles = makeStyles(() => ({
     top: "auto",
     transform: "translateX(-50%)",
   },
-  drawerList: { width: 200 },
+  drawerList: { width: 250 },
   searchBar: { flex: 1 },
   spacer: { flex: 1 },
+  userName: {
+    overflow: "hidden",
+    whiteSpace: "nowrap",
+    textOverflow: "ellipsis",
+  },
 }));
