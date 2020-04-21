@@ -21,17 +21,17 @@
     "clsx": "^1.1.0",
     "cookie": "^0.4.0",
     "css-mediaquery": "^0.1.2",
+    "dotenv": "^8.2.0",
     "isomorphic-unfetch": "^3.0.0",
     "next": "^9.3.5",
     "next-pwa": "^2.3.3",
+    "nprogress": "^0.2.0",
     "prop-types": "^15.7.2",
     "query-string": "^6.12.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
-    "react-query": "^1.2.7",
-    "ua-parser-js": "^0.7.21",
-    "dotenv": "^8.2.0",
-    "nprogress": "^0.2.0"
+    "react-query": "^1.2.9",
+    "ua-parser-js": "^0.7.21"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "2.x",
