@@ -1,7 +1,7 @@
-import React from "react";
-import NextLink from "next/link";
-import { useRouter } from "next/router";
-import PropTypes from "prop-types";
+import React from 'react';
+import NextLink from 'next/link';
+import { useRouter } from 'next/router';
+import PropTypes from 'prop-types';
 import {
   AppBar,
   Toolbar,
@@ -17,22 +17,22 @@ import {
   ListItemText,
   ListItemAvatar,
   Avatar,
-} from "@material-ui/core";
+} from '@material-ui/core';
 import {
   Menu as MenuIcon,
   Search as SearchIcon,
   PersonAdd as PersonAddIcon,
   ExitToApp as ExitToAppIcon,
-} from "@material-ui/icons";
+} from '@material-ui/icons';
+import { useQuery } from 'react-query';
 
-import { AppLink } from "./AppLink";
-import { SearchBar } from "./SearchBar";
-import { AuthContext } from "~/containers";
-import { deleteToken, fetchAPI } from "~/utils";
-import { useQuery } from "react-query";
+import { AuthContext } from '~/containers';
+import { deleteToken, fetchAPI } from '~/utils';
+import { AppLink } from './AppLink';
+import { SearchBar } from './SearchBar';
 
 const fetchMeQuery = (key, { req = undefined } = { req: undefined }) => {
-  const promise = fetchAPI("me", {
+  const promise = fetchAPI('me', {
     req,
   });
 
@@ -47,12 +47,10 @@ export const Layout = ({ children, className }) => {
   const trigger = useScrollTrigger();
   const { loggedIn, setLoggedIn } = React.useContext(AuthContext);
   const { data: userProfile } = useQuery({
-    queryKey: loggedIn && "me",
+    queryKey: loggedIn && 'me',
     queryFn: fetchMeQuery,
   });
-  const userNameProps = React.useMemo(() => ({ className: classes.userName }), [
-    classes.userName,
-  ]);
+  const userNameProps = React.useMemo(() => ({ className: classes.userName }), [classes.userName]);
 
   const handleDrawerClose = React.useCallback(() => {
     setIsDrawerOpening(false);
@@ -95,12 +93,7 @@ export const Layout = ({ children, className }) => {
           <Toolbar>
             {!isSearching && (
               <>
-                <IconButton
-                  edge="start"
-                  color="inherit"
-                  aria-label="menu"
-                  onClick={handleMenuButtonClick}
-                >
+                <IconButton edge="start" color="inherit" aria-label="menu" onClick={handleMenuButtonClick}>
                   <MenuIcon />
                 </IconButton>
 
@@ -110,13 +103,8 @@ export const Layout = ({ children, className }) => {
                   <img className={classes.logo} src="/camera.svg" alt="Logo" />
                 </AppLink>
 
-                {router.pathname !== "/search/[query]" && (
-                  <IconButton
-                    edge="end"
-                    color="inherit"
-                    aria-label="search"
-                    onClick={handleSearchButtonClick}
-                  >
+                {router.pathname !== '/search/[query]' && (
+                  <IconButton edge="end" color="inherit" aria-label="search" onClick={handleSearchButtonClick}>
                     <SearchIcon />
                   </IconButton>
                 )}
@@ -124,11 +112,7 @@ export const Layout = ({ children, className }) => {
             )}
 
             {isSearching && (
-              <SearchBar
-                className={classes.searchBar}
-                onClose={handleStopSearching}
-                onSearch={handleSearch}
-              />
+              <SearchBar className={classes.searchBar} onClose={handleStopSearching} onSearch={handleSearch} />
             )}
           </Toolbar>
         </AppBar>
@@ -153,10 +137,7 @@ export const Layout = ({ children, className }) => {
               {userProfile && (
                 <ListItem>
                   <ListItemAvatar>
-                    <Avatar
-                      alt={userProfile.name}
-                      src={userProfile.profile_image.medium}
-                    />
+                    <Avatar alt={userProfile.name} src={userProfile.profile_image.medium} />
                   </ListItemAvatar>
 
                   <ListItemText
@@ -195,17 +176,17 @@ Layout.propTypes = {
 const useStyles = makeStyles(() => ({
   logo: { width: 36, height: 36 },
   logoLink: {
-    position: "absolute",
-    left: "50%",
-    top: "auto",
-    transform: "translateX(-50%)",
+    position: 'absolute',
+    left: '50%',
+    top: 'auto',
+    transform: 'translateX(-50%)',
   },
   drawerList: { width: 250 },
   searchBar: { flex: 1 },
   spacer: { flex: 1 },
   userName: {
-    overflow: "hidden",
-    whiteSpace: "nowrap",
-    textOverflow: "ellipsis",
+    overflow: 'hidden',
+    whiteSpace: 'nowrap',
+    textOverflow: 'ellipsis',
   },
 }));

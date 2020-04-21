@@ -1,16 +1,10 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
-import { CircularProgress } from "@material-ui/core";
-import { useIntersectionObserver, useSsrMediaQuery } from "~/hooks";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { CircularProgress } from '@material-ui/core';
+import { useIntersectionObserver, useSsrMediaQuery } from '~/hooks';
 
-export const MasonryList = ({
-  items,
-  renderItem,
-  isFetchingMore,
-  onFetchMore,
-  isFetching,
-}) => {
+export const MasonryList = ({ items, renderItem, isFetchingMore, onFetchMore, isFetching }) => {
   const classes = useStyles();
 
   const observerTriggerRef = React.useRef(null);
@@ -43,7 +37,7 @@ export const MasonryList = ({
             {column}
           </div>
         )),
-    [classes.column, columnsCount, items, renderItem]
+    [classes.column, columnsCount, items, renderItem],
   );
 
   return (
@@ -54,7 +48,7 @@ export const MasonryList = ({
         </div>
       )}
 
-      {!isFetching && (
+      {!isFetching && items.length > 0 && (
         <>
           <div className={classes.root}>{columns}</div>
 
@@ -66,6 +60,12 @@ export const MasonryList = ({
             </div>
           )}
         </>
+      )}
+
+      {!isFetching && items.length === 0 && (
+        <div className={classes.emptyImageContainer}>
+          <img className={classes.emptyImage} src="/images/undraw-no-data.svg" alt="Empty" />
+        </div>
       )}
     </>
   );
@@ -81,10 +81,10 @@ MasonryList.propTypes = {
 
 const useColumnsCount = () => {
   const theme = useTheme();
-  const isMdUp = useSsrMediaQuery(theme.breakpoints.up("md"));
-  const isSm = useSsrMediaQuery(theme.breakpoints.only("sm"));
+  const isMdUp = useSsrMediaQuery(theme.breakpoints.up('md'));
+  const isSm = useSsrMediaQuery(theme.breakpoints.only('sm'));
 
-  const columnsCount = React.useMemo(() => {
+  return React.useMemo(() => {
     if (isMdUp) {
       return 3;
     }
@@ -95,30 +95,36 @@ const useColumnsCount = () => {
 
     return 1;
   }, [isMdUp, isSm]);
-
-  return columnsCount;
 };
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    display: "grid",
-    gridAutoFlow: "column",
+    display: 'grid',
+    gridAutoFlow: 'column',
     gridColumnGap: theme.spacing(4),
     padding: theme.spacing(4, 0, 0, 0),
-    width: "100%",
-    gridAutoColumns: "1fr",
+    width: '100%',
+    gridAutoColumns: '1fr',
   },
   column: {
-    display: "grid",
-    gridAutoFlow: "row",
-    gridAutoRows: "min-content",
+    display: 'grid',
+    gridAutoFlow: 'row',
+    gridAutoRows: 'min-content',
     gridRowGap: theme.spacing(4),
   },
-  observerTrigger: { width: "100%", height: theme.spacing(4) },
+  observerTrigger: { width: '100%', height: theme.spacing(4) },
   progressContainer: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
     padding: theme.spacing(4, 0),
   },
+  emptyImageContainer: {
+    height: '100%',
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  emptyImage: { width: 400, height: 'auto' },
 }));

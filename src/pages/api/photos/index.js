@@ -1,14 +1,11 @@
-import queryString from "query-string";
+import queryString from 'query-string';
 
-import { fetchUnsplash } from "~/utils";
+import { fetchUnsplash } from '~/utils';
 
 const getPhotosAPI = async (req, res) => {
-  const photos = await fetchUnsplash(
-    `photos?${queryString.stringify(req.query)}`,
-    {
-      req,
-    }
-  );
+  const photos = await fetchUnsplash(`photos?${queryString.stringify(req.query)}`, {
+    req,
+  });
 
   res.send(photos);
 };
