@@ -7,15 +7,15 @@ import { AuthProvider } from '~/containers';
 import { PhotosPageHead, PhotosPageContent } from '~/modules/photos';
 
 const HomePage = ({ photos, deviceInfo, origin, loggedIn }) => {
+  const appInfoProviderValue = React.useMemo(() => ({ deviceInfo, origin }), [deviceInfo, origin]);
   const authProviderValue = React.useMemo(() => ({ loggedIn }), [loggedIn]);
   const latestPhoto = photos[photos.length - 1];
 
   return (
     <>
-      <PhotosPageHead origin={origin} photo={latestPhoto} />
-
-      <DeviceInfoProvider value={deviceInfo}>
+      <DeviceInfoProvider value={appInfoProviderValue}>
         <AuthProvider value={authProviderValue}>
+          <PhotosPageHead photo={latestPhoto} />
           <PhotosPageContent photos={photos} />
         </AuthProvider>
       </DeviceInfoProvider>
