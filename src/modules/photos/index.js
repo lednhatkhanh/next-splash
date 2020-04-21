@@ -1,2 +1,2 @@
-export * from "./PhotosPageHead";
-export * from "./PhotosPageContent";
+export * from './PhotosPageHead';
+export * from './PhotosPageContent';

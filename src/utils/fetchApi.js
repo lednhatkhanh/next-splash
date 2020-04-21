@@ -1,7 +1,7 @@
-import fetch from "isomorphic-unfetch";
+import fetch from 'isomorphic-unfetch';
 
-import { getAbsoluteUrl } from "./getAbsoluteUrl";
-import { getToken } from "./token";
+import { getAbsoluteUrl } from './getAbsoluteUrl';
+import { getToken } from './token';
 
 export const fetchAPI = (path, options = {}) => {
   const { req, ...otherOptions } = options;
