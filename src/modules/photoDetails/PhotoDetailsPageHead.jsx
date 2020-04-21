@@ -1,9 +1,11 @@
-import React from "react";
-import PropTypes from "prop-types";
-import Head from "next/head";
-import { useExtractPhotoMetadata } from "~/hooks";
+import React from 'react';
+import PropTypes from 'prop-types';
+import Head from 'next/head';
+import { useExtractPhotoMetadata } from '~/hooks';
+import { DeviceInfoContext } from '~/containers';
 
-export const PhotoDetailsPageHead = ({ photoDetails, origin }) => {
+export const PhotoDetailsPageHead = ({ photoDetails }) => {
+  const { origin } = React.useContext(DeviceInfoContext);
   const { description } = useExtractPhotoMetadata(photoDetails);
 
   return (
@@ -33,6 +35,5 @@ export const PhotoDetailsPageHead = ({ photoDetails, origin }) => {
 };
 
 PhotoDetailsPageHead.propTypes = {
-  origin: PropTypes.string.isRequired,
   photoDetails: PropTypes.object.isRequired,
 };

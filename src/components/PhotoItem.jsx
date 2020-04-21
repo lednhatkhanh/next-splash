@@ -11,11 +11,13 @@ import {
 import { useExtractPhotoMetadata, useTriggerDownloadPhoto, useCreatePhotoSrcSet } from '~/hooks';
 import { AuthContext } from '~/containers';
 import { AppLink } from './AppLink';
+import { ShareMenu } from '~/components';
 
 const photoWidths = Array.from({ length: 10 }, (_v, i) => (i + 3) * 100);
 
 export const PhotoItem = ({ photo, onToggleLike }) => {
   const classes = useStyles();
+  const [shareMenuAnchorEl, setShareMenuAnchorEl] = React.useState(null);
   const [downloadPhoto] = useTriggerDownloadPhoto(photo);
   const { username, description } = useExtractPhotoMetadata(photo);
   const { loggedIn } = React.useContext(AuthContext);
@@ -36,43 +38,58 @@ export const PhotoItem = ({ photo, onToggleLike }) => {
     onToggleLike(photo);
   };
 
+  const handleOpenShareMenu = (event) => {
+    event.stopPropagation();
+    event.preventDefault();
+
+    setShareMenuAnchorEl(event.currentTarget);
+  };
+
+  const handleCloseShareMenu = () => {
+    setShareMenuAnchorEl(null);
+  };
+
   return (
-    <AppLink href="/photos/[id]" as={`/photos/${photo.id}`}>
-      <Paper className={classes.paper} elevation={6}>
-        <img className={classes.img} src={photo.urls.regular} alt={description} sizes={sizes} srcSet={srcSet} />
+    <>
+      <AppLink href="/photos/[id]" as={`/photos/${photo.id}`}>
+        <Paper className={classes.paper} elevation={6}>
+          <img className={classes.img} src={photo.urls.regular} alt={description} sizes={sizes} srcSet={srcSet} />
 
-        <div className={classes.overlay}>
-          <div className={classes.userInfo}>
-            <Avatar className={classes.avatar} src={photo.user.profile_image.medium} alt={username} />
+          <div className={classes.overlay}>
+            <div className={classes.userInfo}>
+              <Avatar className={classes.avatar} src={photo.user.profile_image.medium} alt={username} />
 
-            <Hidden mdDown>
-              <Typography component="span" variant="body1">
-                {photo.user.name}
-              </Typography>
-            </Hidden>
+              <Hidden mdDown>
+                <Typography component="span" variant="body1">
+                  {photo.user.name}
+                </Typography>
+              </Hidden>
+            </div>
+
+            <div className={classes.actions}>
+              <Button
+                disabled={!loggedIn}
+                startIcon={photo.liked_by_user ? <FavoriteOutlinedIcon /> : <FavoriteIcon />}
+                onClick={handleLikeButtonClick}
+                color={photo.liked_by_user ? 'secondary' : undefined}
+              >
+                {photo.likes}
+              </Button>
+
+              <Button onClick={handleDownloadPhoto}>
+                <GetAppIcon />
+              </Button>
+
+              <Button onClick={handleOpenShareMenu}>
+                <ShareIcon />
+              </Button>
+            </div>
           </div>
+        </Paper>
+      </AppLink>
 
-          <div className={classes.actions}>
-            <Button
-              disabled={!loggedIn}
-              startIcon={photo.liked_by_user ? <FavoriteOutlinedIcon /> : <FavoriteIcon />}
-              onClick={handleLikeButtonClick}
-              color={photo.liked_by_user ? 'secondary' : undefined}
-            >
-              {photo.likes}
-            </Button>
-
-            <Button onClick={handleDownloadPhoto}>
-              <GetAppIcon />
-            </Button>
-
-            <Button>
-              <ShareIcon />
-            </Button>
-          </div>
-        </div>
-      </Paper>
-    </AppLink>
+      <ShareMenu photo={photo} anchorEl={shareMenuAnchorEl} open={!!shareMenuAnchorEl} onClose={handleCloseShareMenu} />
+    </>
   );
 };
 

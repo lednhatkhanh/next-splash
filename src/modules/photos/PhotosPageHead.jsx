@@ -1,10 +1,12 @@
-import React from "react";
-import PropTypes from "prop-types";
-import Head from "next/head";
+import React from 'react';
+import PropTypes from 'prop-types';
+import Head from 'next/head';
 
-import { useExtractPhotoMetadata } from "~/hooks";
+import { useExtractPhotoMetadata } from '~/hooks';
+import { DeviceInfoContext } from '~/containers';
 
-export const PhotosPageHead = ({ photo, origin }) => {
+export const PhotosPageHead = ({ photo }) => {
+  const { origin } = React.useContext(DeviceInfoContext);
   const { description } = useExtractPhotoMetadata(photo);
 
   return (
@@ -15,7 +17,7 @@ export const PhotosPageHead = ({ photo, origin }) => {
       <meta name="twitter:description" content="Beautiful free photos" />
       {photo && (
         <>
-          {" "}
+          {' '}
           <meta name="twitter:image" content={photo.urls.regular} />
           <meta name="twitter:image:alt" content={description} />
         </>
@@ -42,5 +44,4 @@ export const PhotosPageHead = ({ photo, origin }) => {
 
 PhotosPageHead.propTypes = {
   photo: PropTypes.object.isRequired,
-  origin: PropTypes.string.isRequired,
 };

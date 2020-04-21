@@ -1,11 +1,13 @@
-import React from "react";
-import { useRouter } from "next/router";
-import Head from "next/head";
-import PropTypes from "prop-types";
-import { useExtractPhotoMetadata } from "~/hooks";
+import React from 'react';
+import { useRouter } from 'next/router';
+import Head from 'next/head';
+import PropTypes from 'prop-types';
+import { useExtractPhotoMetadata } from '~/hooks';
+import { DeviceInfoContext } from '~/containers';
 
-export const SearchPageHead = ({ photo, origin }) => {
+export const SearchPageHead = ({ photo }) => {
   const router = useRouter();
+  const { origin } = React.useContext(DeviceInfoContext);
   const { description } = useExtractPhotoMetadata(photo);
 
   return (
@@ -15,13 +17,10 @@ export const SearchPageHead = ({ photo, origin }) => {
       {/* Twitter tags */}
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content="Next Splash" />
-      <meta
-        name="twitter:description"
-        content={`Photos about ${router.query.query}`}
-      />
+      <meta name="twitter:description" content={`Photos about ${router.query.query}`} />
       {photo && (
         <>
-          {" "}
+          {' '}
           <meta name="twitter:image" content={photo.urls.regular} />
           <meta name="twitter:image:alt" content={description} />
         </>
@@ -29,10 +28,7 @@ export const SearchPageHead = ({ photo, origin }) => {
 
       {/* OpenGraph tags */}
       <meta property="og:title" content="Next Splash" />
-      <meta
-        property="og:description"
-        content={`Photos about ${router.query.query}`}
-      />
+      <meta property="og:description" content={`Photos about ${router.query.query}`} />
       <meta property="og:url" content={origin} />
       <meta property="og:type" content="website" />
 
@@ -51,5 +47,4 @@ export const SearchPageHead = ({ photo, origin }) => {
 
 SearchPageHead.propTypes = {
   photo: PropTypes.object.isRequired,
-  origin: PropTypes.string.isRequired,
 };
