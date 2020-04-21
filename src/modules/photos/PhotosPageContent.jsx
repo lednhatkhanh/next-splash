@@ -1,10 +1,10 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { useMutation, queryCache, useInfiniteQuery } from "react-query";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { useMutation, queryCache, useInfiniteQuery } from 'react-query';
 
-import { Layout, PhotosList } from "~/components";
-import { toggleLikePhotoMutation, fetchPhotos } from "~/fetchers";
-import { AuthContext } from "~/containers";
+import { Layout, PhotosList } from '~/components';
+import { toggleLikePhotoMutation, fetchPhotos } from '~/fetchers';
+import { AuthContext } from '~/containers';
 
 export const PhotosPageContent = ({ photos: initialPhotos }) => {
   const { loggedIn } = React.useContext(AuthContext);
@@ -23,7 +23,7 @@ export const PhotosPageContent = ({ photos: initialPhotos }) => {
 
     await toggleLikePhoto({
       id: photo.id,
-      type: photo.liked_by_user ? "unlike" : "like",
+      type: photo.liked_by_user ? 'unlike' : 'like',
     });
   };
 
@@ -46,31 +46,28 @@ PhotosPageContent.propTypes = {
 const useToggleLikePhotoMutation = () => {
   const [toggleLikePhoto] = useMutation(toggleLikePhotoMutation, {
     onMutate: ({ id: mutatingPhotoId, type }) => {
-      const oldQueryData = queryCache.getQueryData("photos");
+      const oldQueryData = queryCache.getQueryData('photos');
 
       queryCache.setQueryData(
-        "photos",
+        'photos',
         oldQueryData.map((page) =>
           page.map((currentPhoto) =>
             currentPhoto.id === mutatingPhotoId
               ? {
                   ...currentPhoto,
-                  likes:
-                    type === "unlike"
-                      ? currentPhoto.likes - 1
-                      : currentPhoto.likes + 1,
-                  liked_by_user: type === "unlike" ? false : true,
+                  likes: type === 'unlike' ? currentPhoto.likes - 1 : currentPhoto.likes + 1,
+                  liked_by_user: type === 'unlike' ? false : true,
                 }
-              : currentPhoto
-          )
-        )
+              : currentPhoto,
+          ),
+        ),
       );
 
-      return () => queryCache.setQueryData("photos", oldQueryData);
+      return () => queryCache.setQueryData('photos', oldQueryData);
     },
     onError: (_err, _data, rollback) => rollback(),
     onSettled: () => {
-      queryCache.refetchQueries("photos");
+      queryCache.refetchQueries('photos');
     },
   });
 
@@ -79,7 +76,7 @@ const useToggleLikePhotoMutation = () => {
 
 const useFetchPhotos = (initialPhotos) => {
   const { fetchMore, data, isFetchingMore } = useInfiniteQuery({
-    queryKey: "photos",
+    queryKey: 'photos',
     queryFn: fetchPhotos,
     config: {
       getFetchMore(_lastPage, allPages) {

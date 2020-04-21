@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 
 export const useIntersectionObserver = (element, callback) => {
   const callbackRef = React.useRef(callback);
@@ -9,7 +9,7 @@ export const useIntersectionObserver = (element, callback) => {
   }, [callback]);
 
   React.useEffect(() => {
-    if (typeof window !== "undefined") {
+    if (typeof window !== 'undefined') {
       const newObserver = new IntersectionObserver((entries) => {
         const [firstEntry] = entries;
 

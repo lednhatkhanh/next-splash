@@ -1,1 +1,1 @@
-export * from "./PhotoDetailsPageContent";
+export * from './PhotoDetailsPageContent';

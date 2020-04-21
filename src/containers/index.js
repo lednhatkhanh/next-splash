@@ -1,2 +1,2 @@
-export * from "./DeviceInfoProvider";
-export * from "./AuthProvider";
+export * from './DeviceInfoProvider';
+export * from './AuthProvider';
