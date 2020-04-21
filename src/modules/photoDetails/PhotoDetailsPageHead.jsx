@@ -1,7 +1,7 @@
-import React from "react";
-import PropTypes from "prop-types";
-import Head from "next/head";
-import { useExtractPhotoMetadata } from "~/hooks";
+import React from 'react';
+import PropTypes from 'prop-types';
+import Head from 'next/head';
+import { useExtractPhotoMetadata } from '~/hooks';
 
 export const PhotoDetailsPageHead = ({ photoDetails, origin }) => {
   const { description } = useExtractPhotoMetadata(photoDetails);

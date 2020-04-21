@@ -1,4 +1,4 @@
-import { fetchUnsplash } from "~/utils";
+import { fetchUnsplash } from '~/utils';
 
 const getPhotoDetailsAPI = async (req, res) => {
   const photo = await fetchUnsplash(`photos/${req.query.id}`, {

@@ -1,7 +1,7 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { TextField, InputAdornment } from "@material-ui/core";
-import { Search as SearchIcon } from "@material-ui/icons";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { TextField, InputAdornment } from '@material-ui/core';
+import { Search as SearchIcon } from '@material-ui/icons';
 
 const InputProps = {
   startAdornment: (

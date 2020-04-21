@@ -1,22 +1,17 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { Button, makeStyles } from "@material-ui/core";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Button, makeStyles } from '@material-ui/core';
 import {
   FavoriteBorderRounded as FavoriteOutlinedIcon,
   Favorite as FavoriteIcon,
   GetAppOutlined as GetAppOutlinedIcon,
   ShareOutlined as ShareOutlinedIcon,
   InfoOutlined as InfoOutlinedIcon,
-} from "@material-ui/icons";
+} from '@material-ui/icons';
 
-import { AuthContext } from "~/containers";
+import { AuthContext } from '~/containers';
 
-const Actions = ({
-  photoDetails,
-  onToggleLike,
-  onShowStatistics,
-  onDownload,
-}) => {
+const Actions = ({ photoDetails, onToggleLike, onShowStatistics, onDownload }) => {
   const classes = useStyles();
   const { loggedIn } = React.useContext(AuthContext);
 
@@ -25,14 +20,8 @@ const Actions = ({
       <Button
         size="large"
         disabled={!loggedIn}
-        startIcon={
-          photoDetails.liked_by_user ? (
-            <FavoriteIcon />
-          ) : (
-            <FavoriteOutlinedIcon />
-          )
-        }
-        color={photoDetails.liked_by_user ? "secondary" : undefined}
+        startIcon={photoDetails.liked_by_user ? <FavoriteIcon /> : <FavoriteOutlinedIcon />}
+        color={photoDetails.liked_by_user ? 'secondary' : undefined}
         onClick={onToggleLike}
       >
         {photoDetails.likes}
@@ -54,10 +43,10 @@ const Actions = ({
 
 const useStyles = makeStyles((theme) => ({
   actions: {
-    display: "grid",
-    justifyContent: "center",
-    gridAutoFlow: "column",
-    alignItems: "center",
+    display: 'grid',
+    justifyContent: 'center',
+    gridAutoFlow: 'column',
+    alignItems: 'center',
     gridColumnGap: theme.spacing(3),
   },
 }));

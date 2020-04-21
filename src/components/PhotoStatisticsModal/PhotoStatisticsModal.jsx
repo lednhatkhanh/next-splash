@@ -1,6 +1,6 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { Typography, Divider, Paper, makeStyles } from "@material-ui/core";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Typography, Divider, Paper, makeStyles } from '@material-ui/core';
 import {
   VisibilityOutlined as VisibilityOutlinedIcon,
   GetAppOutlined as GetAppOutlinedIcon,
@@ -12,34 +12,28 @@ import {
   IsoOutlined as IsoOutlinedIcon,
   AllOutOutlined as AllOutOutlinedIcon,
   ColorLensOutlined as ColorLensOutlinedIcon,
-} from "@material-ui/icons";
-import { useQuery } from "react-query";
+} from '@material-ui/icons';
+import { useQuery } from 'react-query';
 
-import { fetchPhotoStatistics } from "~/fetchers";
-import { formatDateTime } from "~/utils";
-import { StatisticsItem } from "./StatisticsItem";
-import { BlurModal } from "../BlurModal";
-import { ExifStatisticsItem } from "./ExifStatisticsItem";
+import { fetchPhotoStatistics } from '~/fetchers';
+import { formatDateTime } from '~/utils';
+import { StatisticsItem } from './StatisticsItem';
+import { BlurModal } from '../BlurModal';
+import { ExifStatisticsItem } from './ExifStatisticsItem';
 
 export const PhotoStatisticsModal = ({ photoDetails, onClose }) => {
   const classes = useStyles();
-  const {
-    data: photoStatistics,
-    isFetching: isFetchingPhotoStatistics,
-  } = useQuery(["photoStatistics", photoDetails.id], fetchPhotoStatistics, {
-    staleTime: 1000 * 60 * 5, // 5 minutes
-  });
-  const publishedAt = React.useMemo(
-    () => formatDateTime(new Date(photoDetails.updated_at)),
-    [photoDetails]
+  const { data: photoStatistics, isFetching: isFetchingPhotoStatistics } = useQuery(
+    ['photoStatistics', photoDetails.id],
+    fetchPhotoStatistics,
+    {
+      staleTime: 1000 * 60 * 5, // 5 minutes
+    },
   );
+  const publishedAt = React.useMemo(() => formatDateTime(new Date(photoDetails.updated_at)), [photoDetails]);
 
   return (
-    <BlurModal
-      className={classes.modal}
-      open={!!photoDetails}
-      onClose={onClose}
-    >
+    <BlurModal className={classes.modal} open={!!photoDetails} onClose={onClose}>
       <Paper className={classes.card}>
         <Typography component="h3" variant="h5">
           Info
@@ -54,11 +48,7 @@ export const PhotoStatisticsModal = ({ photoDetails, onClose }) => {
             label="Views"
             icon={<VisibilityOutlinedIcon />}
             loading={isFetchingPhotoStatistics}
-            helperText={
-              photoStatistics
-                ? `+${photoStatistics.views.historical.change} since last month`
-                : undefined
-            }
+            helperText={photoStatistics ? `+${photoStatistics.views.historical.change} since last month` : undefined}
           >
             {photoDetails.views}
           </StatisticsItem>
@@ -68,9 +58,7 @@ export const PhotoStatisticsModal = ({ photoDetails, onClose }) => {
             icon={<GetAppOutlinedIcon />}
             loading={isFetchingPhotoStatistics}
             helperText={
-              photoStatistics
-                ? `+${photoStatistics.downloads.historical.change} since last month`
-                : undefined
+              photoStatistics ? `+${photoStatistics.downloads.historical.change} since last month` : undefined
             }
           >
             {photoDetails.downloads}
@@ -84,23 +72,11 @@ export const PhotoStatisticsModal = ({ photoDetails, onClose }) => {
             content={`${photoDetails.width} x ${photoDetails.height}`}
           />
 
-          <ExifStatisticsItem
-            label="Color"
-            icon={<ColorLensOutlinedIcon />}
-            content={photoDetails.color}
-          />
+          <ExifStatisticsItem label="Color" icon={<ColorLensOutlinedIcon />} content={photoDetails.color} />
 
-          <ExifStatisticsItem
-            label="Camera make"
-            icon={<PhotoOutlinedIcon />}
-            content={photoDetails.exif.make}
-          />
+          <ExifStatisticsItem label="Camera make" icon={<PhotoOutlinedIcon />} content={photoDetails.exif.make} />
 
-          <ExifStatisticsItem
-            label="Camera model"
-            icon={<CameraAltOutlinedIcon />}
-            content={photoDetails.exif.model}
-          />
+          <ExifStatisticsItem label="Camera model" icon={<CameraAltOutlinedIcon />} content={photoDetails.exif.model} />
 
           <ExifStatisticsItem
             label="Exposure time"
@@ -108,17 +84,9 @@ export const PhotoStatisticsModal = ({ photoDetails, onClose }) => {
             content={photoDetails.exif.exposure_time}
           />
 
-          <ExifStatisticsItem
-            label="Aperture"
-            icon={<CameraOutlinedIcon />}
-            content={photoDetails.exif.aperture}
-          />
+          <ExifStatisticsItem label="Aperture" icon={<CameraOutlinedIcon />} content={photoDetails.exif.aperture} />
 
-          <ExifStatisticsItem
-            label="Iso"
-            icon={<IsoOutlinedIcon />}
-            content={photoDetails.exif.iso}
-          />
+          <ExifStatisticsItem label="Iso" icon={<IsoOutlinedIcon />} content={photoDetails.exif.iso} />
 
           <ExifStatisticsItem
             label="Focal Length"
@@ -138,34 +106,34 @@ PhotoStatisticsModal.propTypes = {
 
 const useStyles = makeStyles((theme) => ({
   modal: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    [theme.breakpoints.down("md")]: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    [theme.breakpoints.down('md')]: {
       padding: theme.spacing(0, 1),
     },
   },
   card: {
     padding: theme.spacing(3),
     minWidth: 600,
-    outline: "none",
-    [theme.breakpoints.down("md")]: {
-      width: "100%",
+    outline: 'none',
+    [theme.breakpoints.down('md')]: {
+      width: '100%',
       minWidth: 0,
     },
   },
   content: {
     marginTop: 20,
-    display: "grid",
-    gridTemplateColumns: "repeat(3, 1fr)",
+    display: 'grid',
+    gridTemplateColumns: 'repeat(3, 1fr)',
     gridColumnGap: theme.spacing(3),
     gridRowGap: theme.spacing(2),
-    [theme.breakpoints.down("md")]: {
-      gridTemplateColumns: "repeat(2, 1fr)",
+    [theme.breakpoints.down('md')]: {
+      gridTemplateColumns: 'repeat(2, 1fr)',
       gridRowGap: theme.spacing(3),
     },
   },
   divider: {
-    gridColumn: "1 / -1",
+    gridColumn: '1 / -1',
   },
 }));

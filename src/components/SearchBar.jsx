@@ -1,16 +1,11 @@
-import React from "react";
-import PropTypes from "prop-types";
-import {
-  InputBase,
-  makeStyles,
-  InputAdornment,
-  IconButton,
-} from "@material-ui/core";
-import { Search as SearchIcon, Close as CloseIcon } from "@material-ui/icons";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { InputBase, makeStyles, InputAdornment, IconButton } from '@material-ui/core';
+import { Search as SearchIcon, Close as CloseIcon } from '@material-ui/icons';
 
 export const SearchBar = ({ className, onClose, onSearch }) => {
   const classes = useStyles();
-  const [inputValue, setInputValue] = React.useState("");
+  const [inputValue, setInputValue] = React.useState('');
 
   const handleInputChange = React.useCallback((event) => {
     setInputValue(event.target.value);
@@ -23,12 +18,7 @@ export const SearchBar = ({ className, onClose, onSearch }) => {
   };
 
   return (
-    <form
-      className={className}
-      method="POST"
-      target="#"
-      onSubmit={handleSubmit}
-    >
+    <form className={className} method="POST" target="#" onSubmit={handleSubmit}>
       <InputBase
         id="query"
         name="query"
@@ -65,8 +55,8 @@ SearchBar.propTypes = {
 const useStyles = makeStyles(() => ({
   root: {
     flex: 1,
-    color: "inherit",
-    width: "100%",
+    color: 'inherit',
+    width: '100%',
   },
   input: {
     height: 40,

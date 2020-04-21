@@ -1,26 +1,14 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { MasonryList } from "./MasonryList";
-import { PhotoItem } from "./PhotoItem";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { MasonryList } from './MasonryList';
+import { PhotoItem } from './PhotoItem';
 
-export const PhotosList = ({
-  photos,
-  onFetchMore,
-  isFetchingMore,
-  isFetching,
-  onToggleLike,
-}) => {
+export const PhotosList = ({ photos, onFetchMore, isFetchingMore, isFetching, onToggleLike }) => {
   const handleRenderPhoto = React.useCallback(
     (photo, photoIndex) => {
-      return (
-        <PhotoItem
-          key={`${photo.id}-${photoIndex}`}
-          photo={photo}
-          onToggleLike={onToggleLike}
-        />
-      );
+      return <PhotoItem key={`${photo.id}-${photoIndex}`} photo={photo} onToggleLike={onToggleLike} />;
     },
-    [onToggleLike]
+    [onToggleLike],
   );
 
   return (

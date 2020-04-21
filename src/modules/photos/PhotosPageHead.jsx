@@ -1,8 +1,8 @@
-import React from "react";
-import PropTypes from "prop-types";
-import Head from "next/head";
+import React from 'react';
+import PropTypes from 'prop-types';
+import Head from 'next/head';
 
-import { useExtractPhotoMetadata } from "~/hooks";
+import { useExtractPhotoMetadata } from '~/hooks';
 
 export const PhotosPageHead = ({ photo, origin }) => {
   const { description } = useExtractPhotoMetadata(photo);
@@ -15,7 +15,7 @@ export const PhotosPageHead = ({ photo, origin }) => {
       <meta name="twitter:description" content="Beautiful free photos" />
       {photo && (
         <>
-          {" "}
+          {' '}
           <meta name="twitter:image" content={photo.urls.regular} />
           <meta name="twitter:image:alt" content={description} />
         </>

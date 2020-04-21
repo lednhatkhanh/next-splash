@@ -1,2 +1,2 @@
-export * from "./SearchPageHead";
-export * from "./SearchPageContent";
+export * from './SearchPageHead';
+export * from './SearchPageContent';
