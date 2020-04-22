@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "author": "Khanh Le",
   "license": "MIT",
+  "cacheDirectories": [
+    ".next/cache"
+  ],
   "engines": {
     "node": "12.x",
     "yarn": "1.x"
@@ -19,7 +22,7 @@
     "@material-ui/icons": "^4.9.1",
     "@material-ui/lab": "^4.0.0-alpha.50",
     "clsx": "^1.1.0",
-    "cookie": "^0.4.0",
+    "cookie": "^0.4.1",
     "css-mediaquery": "^0.1.2",
     "dotenv": "^8.2.0",
     "isomorphic-unfetch": "^3.0.0",
@@ -45,7 +48,7 @@
     "eslint-plugin-jsx-a11y": "6.x",
     "eslint-plugin-react": "7.x",
     "eslint-plugin-react-hooks": "2.x",
-    "prettier": "^2.0.4",
+    "prettier": "^2.0.5",
     "rimraf": "^3.0.2"
   },
   "bundlewatch": {
