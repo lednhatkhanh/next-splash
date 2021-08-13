@@ -26,7 +26,7 @@
     "css-mediaquery": "^0.1.2",
     "dotenv": "^8.2.0",
     "isomorphic-unfetch": "^3.0.0",
-    "next": "^9.3.5",
+    "next": "^11.1.0",
     "next-pwa": "^2.3.3",
     "nprogress": "^0.2.0",
     "prop-types": "^15.7.2",
